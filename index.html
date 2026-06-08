@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>inf finder</title>
+</head>
+<body>
+    <form action="javascript:findInfs(0)">
+        <h1>1x3 matrix</h1>
+        <button type="button" onclick="clearM(0)">CLEAR</button><br>
+        <div class="matrix">
+            <input type="number" step="0.001" id="000"> <input type="number" step="0.001" id="001"> <input type="number" step="0.001" id="002">
+        </div>
+        <input type="submit" value="FIND INFS"></input>
+        <div id="output0">
+
+        </div>
+    </form>
+    <hr>
+    <form action="javascript:findInfs(1)">
+        <h1>2x3 matrix</h1>
+        <button type="button" onclick="clearM(1)">CLEAR</button><br>
+        <div class="matrix">
+            <input type="number" step="0.001" id="100"> <input type="number" step="0.001" id="101"> <input type="number" step="0.001" id="102">
+            <input type="number" step="0.001" id="110"> <input type="number" step="0.001" id="111"> <input type="number" step="0.001" id="112">
+        </div>
+       <input type="submit" value="FIND INFS"></input>
+        <div id="output1">
+
+        </div>
+    </form>
+    <hr>
+    <form action="javascript:findInfs(2)">
+        <h1>3x3 matrix</h1>
+        <button type="button" onclick="clearM(2)">CLEAR</button><br>
+        <div class="matrix">
+            <input type="number" step="0.001" id="200"> <input type="number" step="0.001" id="201"> <input type="number" step="0.001" id="202">
+            <input type="number" step="0.001" id="210"> <input type="number" step="0.001" id="211"> <input type="number" step="0.001" id="212">
+            <input type="number" step="0.001" id="220"> <input type="number" step="0.001" id="221"> <input type="number" step="0.001" id="222">
+        </div>
+        <input type="submit" value="FIND INFS"></input>
+        <div id="output2">
+
+        </div>
+    </form>
+    <script src="main.js"></script>
+</body>
+</html>

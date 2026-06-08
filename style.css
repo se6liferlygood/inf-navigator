@@ -1,0 +1,18 @@
+.matrix {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    width: 100%;
+}
+
+.matrix input {
+    width: 100%;
+    -webkit-appearance: none;
+    margin: 0;
+    -moz-appearance: textfield;
+}
+
+@media screen and (min-width: 600px) {
+    .matrix {
+        width: 600px;
+    }
+}
