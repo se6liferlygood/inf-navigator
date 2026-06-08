@@ -32,8 +32,7 @@ function findInfs(n) {
             result += (a&(1<<b)?"-M":"M");
             if(b!=2) result += ", "; 
         }
-        result += ")"
-        result += " &rarr; (";
+        result += ") &rarr; (";
         let anyInf = false;
         for(let b = 0; b <= n; b++) {
             let sum = 0;
