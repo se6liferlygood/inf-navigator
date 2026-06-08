@@ -54,7 +54,7 @@ function findInfs(n) {
             } else if(sum==-1) {
                 result += "-M";
             } else {
-                result += (Math.sign(sum)<0?"-":"+")+sum+"M";
+                result += (Math.sign(sum)>0?"+":"")+sum+"M";
             }
             if(b!=n) result += ", ";
         }
