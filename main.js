@@ -42,7 +42,7 @@ function findInfs(n) {
             }
             sum = Math.round(sum*1000)/1000;
             if(sum>1) {
-                result += "&infin;"
+                result += "+&infin;"
                 anyInf = true;
             } else if(sum<-1) {
                 result += "-&infin;";
