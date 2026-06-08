@@ -50,7 +50,7 @@ function findInfs(n) {
             } else if(sum==0) {
                 result += "0";
             } else if(sum==1) {
-                result += "M";
+                result += "+M";
             } else if(sum==-1) {
                 result += "-M";
             } else {
