@@ -26,10 +26,11 @@ function findInfs(n) {
         matrix.push(row);
     }
     outputs[n].innerHTML = "";
+    let count = 1;
     for(let a = 0; a < 8; a++) {
         let result = "(";
         for(let b = 0; b < 3; b++) {
-            result += (a&(1<<b)?"-M":"M");
+            result += (a&(1<<b)?"-M":"+M");
             if(b!=2) result += ", "; 
         }
         result += ") &rarr; (";
@@ -57,7 +58,10 @@ function findInfs(n) {
             }
             if(b!=n) result += ", ";
         }
-        if(anyInf) outputs[n].innerHTML += result+")<br>";
+        if(anyInf) {
+            outputs[n].innerHTML += count+". "+result+")<br>";
+            count++;
+        }
     }
 }
 
