@@ -79,7 +79,7 @@ function copyRow(n,m) {
     let whichMatrix = prompt("which matrix? 1 or 2 or 3 (how many rows the matrix has)");
     let row = prompt("what row in this matrix will you copy? rows: 1"+((n)=>{let str="";for(let a=2;a<=n;a++) str += " or "+a;return str})(whichMatrix))-1;
     whichMatrix--;
-    if((row<=whichMatrix && (row>=0 && row <= 3)) || (whichMatrix>=0 && whichMatrix<=3)) {
+    if(row<=whichMatrix && row>=0 && row <= 3 && whichMatrix>=0 && whichMatrix<=3) {
         for(let a = 0; a < 3; a++) {
             inputMatrices[n][m][a].value = inputMatrices[whichMatrix][row][a].value;
         }
