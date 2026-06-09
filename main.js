@@ -20,8 +20,8 @@ function findInfs(n) {
     for(let i = 0; i <= n; i++) {
         let row = [];
         for(let j = 0; j < 3; j++) {
-            row.push(Number(inputMatrices[n][i][j].value));
             if(inputMatrices[n][i][j].value=="") return;
+            row.push(Number(inputMatrices[n][i][j].value));
         }
         matrix.push(row);
     }
@@ -39,6 +39,7 @@ function findInfs(n) {
             let sum = 0;
             for(let c = 0; c < 3; c++) {
                 sum += matrix[b][c]*(a&(1<<c)?-1:1);
+                if(sum>1 || sum<-1) break;
             }
             sum = Math.round(sum*1000)/1000;
             if(sum>1) {
@@ -72,4 +73,15 @@ function clearM(n) {
         }
     }
     outputs[n].innerHTML = "";
+}
+
+function copyRow(n,m) {
+    let whichMatrix = prompt("which matrix? 1 or 2 or 3 (how many rows the matrix has)");
+    let row = prompt("what row in this matrix will you copy? rows: 1"+((n)=>{let str="";for(let a=2;a<=n;a++) str += " or "+a;return str})(whichMatrix))-1;
+    whichMatrix--;
+    if((row<=whichMatrix && (row>=0 && row <= 3)) || (whichMatrix>=0 && whichMatrix<=3)) {
+        for(let a = 0; a < 3; a++) {
+            inputMatrices[n][m][a].value = inputMatrices[whichMatrix][row][a].value;
+        }
+    }
 }
