@@ -39,21 +39,17 @@ function findInfs(n) {
             let sum = 0;
             for(let c = 0; c < 3; c++) {
                 sum += matrix[b][c]*(a&(1<<c)?-1:1);
-                if(sum>1 || sum<-1) break;
+                if(sum>=1 || sum<=-1) break;
             }
             sum = Math.round(sum*1000)/1000;
-            if(sum>1) {
+            if(sum>=1) {
                 result += "+&infin;"
                 anyInf = true;
-            } else if(sum<-1) {
+            } else if(sum<=-1) {
                 result += "-&infin;";
                 anyInf = true;
             } else if(sum==0) {
                 result += "0";
-            } else if(sum==1) {
-                result += "+M";
-            } else if(sum==-1) {
-                result += "-M";
             } else {
                 result += (Math.sign(sum)>0?"+":"")+sum+"M";
             }
