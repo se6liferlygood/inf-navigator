@@ -39,7 +39,7 @@ function findInfs(n) {
             let sum = 0;
             for(let c = 0; c < 3; c++) {
                 sum += matrix[b][c]*(a&(1<<c)?-1:1);
-                if(sum>=1 || sum<=-1) break;
+                if(sum>1 || sum<-1) break;
             }
             if(sum>1) {
                 result += "+&infin;"
