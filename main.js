@@ -100,6 +100,7 @@ function rotationAutoFill() {
         if(rotations[i].value=="") return;
         radians.push(rotations[i].value*Math.PI/180);
     }
+    outputs[2].innerHTML =  "";
     let a = Math.cos(radians[0]),
         b = Math.sin(radians[0]),
         c = Math.cos(radians[1]),
