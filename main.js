@@ -114,7 +114,7 @@ function rotationAutoFill() {
     ]
     for(let i = 0; i < 3; i++) {
         for(let j = 0; j < 3; j++) {
-            inputMatrices[2][i][j].value = Math.round(rotationMatrix[i][j]*1000)/1000;
+            inputMatrices[2][i][j].value = rotationMatrix[i][j];
         }
     }
 }
