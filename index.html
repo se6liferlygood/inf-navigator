@@ -9,7 +9,7 @@
 <body>
     <form action="javascript:findInfs(2)">
         <h1>3x3 matrix</h1>
-        THE ROTATIONS MUST MATCH EXACTLY!
+        <div>THE ROTATIONS MUST MATCH EXACTLY!</div>
         <div class="matrix">
             <input type="number" step="any" id="R0"><input type="number" step="any" id="R1"><input type="number" step="any" id="R2">
         </div>
@@ -51,6 +51,23 @@
 
         </div>
     </form>
+    <hr>
+    <div>
+        <h2>M explained</h2>
+        if a &gt; 1 then aM = &infin;<br>
+        if a &lt; -1 then aM = -&infin;<br><br>
+
+        and the order of addition matters, you perform addition one at a time from the left while checking for infinites<br>
+        aM + bM + cM<br>
+        = (a+b)M + cM<br><br>
+
+        example: 0.707M + 0.5M - 0.5M = 1.207M - 0.5M = &infin; - 0.5M = &infin;<br><br>
+
+        M is for max coordinate: 340282356779733642748073463979561713663<br>
+        max coordinate can be memorized with 67:<br>
+        0xffffff7p100<br>
+        there are 6 f then 7, this representation of max can be typed into f3x<br><br>
+    </div>
     <script src="main.js"></script>
 </body>
 </html>
