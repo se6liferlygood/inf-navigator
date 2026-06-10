@@ -41,7 +41,6 @@ function findInfs(n) {
                 sum += matrix[b][c]*(a&(1<<c)?-1:1);
                 if(sum>=1 || sum<=-1) break;
             }
-            sum = Math.round(sum*1000)/1000;
             if(sum>1) {
                 result += "+&infin;"
                 anyInf = true;
