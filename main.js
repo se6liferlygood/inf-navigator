@@ -64,6 +64,7 @@ function findInfs(n) {
             count++;
         }
     }
+    if(outputs[n].innerHTML=="") outputs[n].innerHTML += "NO &infin; FOUND";
 }
 
 function clearM(n) {
@@ -73,15 +74,46 @@ function clearM(n) {
         }
     }
     outputs[n].innerHTML = "";
+    if(n==2) {
+        for(let i = 0; i < 3; i++) {
+            rotations[i].value = "";
+        }
+    }
 }
 
 function copyRow(n,m) {
-    let whichMatrix = prompt("which matrix? 1 or 2 or 3 (how many rows the matrix has)");
-    let row = prompt("what row in this matrix will you copy? rows: 1"+((n)=>{let str="";for(let a=2;a<=n;a++) str += " or "+a;return str})(whichMatrix))-1;
+    let whichMatrix = Number(prompt("copy which matrix?\nhow many rows does the matrix have?\n3 or 2 or 1"));
+    if(!whichMatrix || whichMatrix<1 || whichMatrix>3 || Math.floor(whichMatrix)!=whichMatrix) return;
+    let row = Number(prompt("what row in this matrix will you copy?\n1"+((n)=>{let str="";for(let a=2;a<=n;a++) str += " or "+a;return str})(whichMatrix)));
+    if(row < 1 || row > whichMatrix || Math.floor(row)!=row) return;
     whichMatrix--;
-    if(row<=whichMatrix && row>=0 && row <= 3 && whichMatrix>=0 && whichMatrix<=3) {
-        for(let a = 0; a < 3; a++) {
-            inputMatrices[n][m][a].value = inputMatrices[whichMatrix][row][a].value;
+    row--;
+    for(let a = 0; a < 3; a++) {
+        inputMatrices[n][m][a].value = inputMatrices[whichMatrix][row][a].value;
+    }
+}
+
+var rotations = [document.getElementById("R0"),document.getElementById("R1"),document.getElementById("R2")];
+function rotationAutoFill() {
+    let radians = [];
+    for(let i = 0; i < 3; i++) {
+        if(rotations[i].value=="") return;
+        radians.push(rotations[i].value*Math.PI/180);
+    }
+    let a = Math.cos(radians[0]),
+        b = Math.sin(radians[0]),
+        c = Math.cos(radians[1]),
+        d = Math.sin(radians[1]),
+        e = Math.cos(radians[2]),
+        f = Math.sin(radians[2]),
+    rotationMatrix = [
+        [e*c+f*b*d, e*b*d-f*c, a*d],
+        [f*a, e*a, -b],
+        [f*b*c-e*d, f*d+e*b*c, a*c]
+    ]
+    for(let i = 0; i < 3; i++) {
+        for(let j = 0; j < 3; j++) {
+            inputMatrices[2][i][j].value = Math.round(rotationMatrix[i][j]*1000)/1000;
         }
     }
 }
