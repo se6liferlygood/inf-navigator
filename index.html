@@ -8,12 +8,15 @@
 </head>
 <body>
     <form action="javascript:findInfs(2)">
-        <h1>3x3 matrix</h1>
-        <div>THE ROTATIONS MUST MATCH EXACTLY!</div>
+        <h1 id="top">3x3 matrix</h1>
+        <div>
+            you can find rotations with <a href="#infNav">&infin; navigator</a><br>
+            <b>the rotations here and ingame must match exactly</b>
+        </div>
         <div class="matrix">
             <input type="number" step="any" id="R0"><input type="number" step="any" id="R1"><input type="number" step="any" id="R2">
         </div>
-        <button type="button" onclick="rotationAutoFill()">ROTATION AUTO FILL</button>
+        <button type="button" onclick="rotationAutoFill()">ROTATION AUTO FILL MATRIX</button>
         <br><br>
         <button type="button" onclick="clearM(2)">CLEAR</button><br>
         <div class="matrix">
@@ -52,10 +55,55 @@
         </div>
     </form>
     <hr>
+    <div id="infNavigator">
+        <h2 id="infNav">&infin; navigator</h2>
+        <div>
+            ingame you must type in the rotation in an backwards order to make it match<br>
+            for example lets say you want the rotation (a, b, c)<br>
+            then you type it in like this into f3x: (0, 0, c) &rarr; (0, b, c) &rarr; (a, b, c)<br>
+            rotation tool might say it is a different rotation but the result is the same<br><br>
+        </div>
+        <a href="#top"><button onclick="copyRotation()">COPY ROTATION</button></a>
+        <div id="infNavOutput"></div>
+        <canvas id="infNavCanvas"></canvas>
+        <form autocomplete="off" class="controls">
+            <fieldset>
+                <legend><select id="infNavView" onchange="viewMode = this.value; drawInfNavMap();">
+                    <option value="0">&beta; view</option>
+                    <option value="1">&alpha; view</option>
+                    <option value="2">&gamma; view</option>
+                </select></legend>
+                <input type="number" step="any" value="0" id="infNavBeta" oninput="this.value = rotationMod(this.value); infNavBetaSlider.value = this.value; view = Number(this.value); drawInfNavMap();">
+                <input type="range" step="any" id="infNavBetaSlider" min="0" max="360" value="0" oninput="this.value = rotationMod(this.value); infNavBeta.value = this.value; view = Number(this.value); drawInfNavMap();">
+            </fieldset>
+            <fieldset>
+                <legend>INCREMENT</legend>
+                <input type="number" id="infNavIncrement" step="any" value="2" min="1" oninput="if(this.value<1) this.value=1; inc = Number(this.value); drawInfNavMap();">
+            </fieldset>
+            <fieldset>
+                <legend>OFFSET</legend>
+                <select id="infNavOffset" onchange="offset = Number(this.value); drawInfNavMap();">
+                    <option value="0">(+M,+M,+M)</option>
+                    <option value="1">(-M,+M,+M)</option>
+                    <option value="2">(+M,-M,+M)</option>
+                    <option value="3">(-M,-M,+M)</option>
+                    <option value="4">(+M,+M,-M)</option>
+                    <option value="5">(-M,+M,-M)</option>
+                    <option value="6">(+M,-M,-M)</option>
+                    <option value="7">(-M,-M,-M)</option>
+                </select>
+            </fieldset>
+        </form>
+        <div>select colors to isolate them, if no colors are selected then all of them will be shown</div>
+        <div id="infNavInfo"></div>
+        <button onclick="clearInfNavColors()">CLEAR</button>
+    </div>
+    <hr>
     <div>
         <h2>M explained</h2>
         if a &gt; 1 then aM = &infin;<br>
-        if a &lt; -1 then aM = -&infin;<br><br>
+        if a &lt; -1 then aM = -&infin;<br>
+        if -1 &leq; a &leq; 1 then aM = aM <br><br>
 
         and the order of addition matters, you perform addition one at a time from the left while checking for infinites<br>
         aM + bM + cM<br>
