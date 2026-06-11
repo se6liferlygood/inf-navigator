@@ -1,7 +1,7 @@
 .matrix {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr;
-    width: 100%;
+    width: 600px;
 }
 
 .matrix input {
@@ -15,8 +15,42 @@
     width: min-content;
 }
 
-@media screen and (min-width: 600px) {
-    .matrix {
-        width: 600px;
-    }
+.infNavResult {
+    width:fit-content;
+}
+
+canvas {
+    background-color: black;
+    width: 600px;
+    aspect-ratio: 1/1;
+    image-rendering: optimizeSpeed;
+}
+
+fieldset {
+    width: fit-content;
+    border: solid black;
+}
+
+.controls {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    width: 600px;
+    margin-bottom: 10px;
+}
+
+#infNavInfo {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    width: 600px;
+    text-align: center;
+}
+
+.infNavColorCode {
+    border: solid rgba(0,0,0,0) 2px;
+    text-align: left;
+    border: solid rgba(0,0,0,0) 2px;
+}
+
+.infNavColorCode input:hover {
+    cursor: pointer;
 }
