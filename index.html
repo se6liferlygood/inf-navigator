@@ -74,12 +74,12 @@
                     <option value="1">&alpha; view</option>
                     <option value="2">&gamma; view</option>
                 </select></legend>
-                <input type="number" step="any" value="0" id="infNavBeta" oninput="this.value = rotationMod(this.value); infNavBetaSlider.value = this.value; view = Number(this.value); drawInfNavMap();">
-                <input type="range" step="any" id="infNavBetaSlider" min="0" max="360" value="0" oninput="this.value = rotationMod(this.value); infNavBeta.value = this.value; view = Number(this.value); drawInfNavMap();">
+                <input type="number" step="2" value="0" id="infNavBeta" oninput="this.value = rotationMod(this.value); infNavBetaSlider.value = this.value; view = Number(this.value); drawInfNavMap();">
+                <input type="range" step="2" id="infNavBetaSlider" min="0" max="360" value="0" oninput="this.value = rotationMod(this.value); infNavBeta.value = this.value; view = Number(this.value); drawInfNavMap();">
             </fieldset>
             <fieldset>
                 <legend>INCREMENT</legend>
-                <input type="number" id="infNavIncrement" step="any" value="2" min="1" oninput="if(this.value<1) this.value=1; inc = Number(this.value); drawInfNavMap();">
+                <input type="number" id="infNavIncrement" step="any" value="2" min="1" oninput="if(this.value<1) this.value=1; inc = Number(this.value); infNavBeta.step = inc, infNavBetaSlider.step = inc; drawInfNavMap();">
             </fieldset>
             <fieldset>
                 <legend>OFFSET</legend>
