@@ -260,8 +260,9 @@ function copyRotation()  {
     }
 }
 
-function drawInfNavMap() {
-    console.log("DRAWN!");
+var animating = false;
+function drawInfNavMap(animationCall=false) {
+    if(animating&&!animationCall) return;
     infctx.clearRect(0,0,infNavCanvas.width,infNavCanvas.height);
     for(let i = 0; i < infNavCanvas.height; i += inc) {
         for(let j = 0; j < infNavCanvas.width; j += inc) {
@@ -292,3 +293,29 @@ function drawInfNavMap() {
     updateSelectedRotation();
 }
 drawInfNavMap();
+
+var viewNum =  document.getElementById("infNavBeta");
+var viewSlider = document.getElementById("infNavBetaSlider");
+var animationToggle = document.getElementById("animationToggle");
+var animationSpeed = 360/5000;
+async function infNavAnimate() {
+    if(animating) return;
+    animating = true
+    animationToggle.checked = true
+    let then = performance.now();
+    let passed = 0;
+    let oldView = view;
+    while(animating) {
+        passed = performance.now()-then;
+        view = (oldView+passed*animationSpeed)%360;
+        viewNum.value = view;
+        viewSlider.value = view;
+        drawInfNavMap(true);
+        await new Promise(requestAnimationFrame);
+    }
+    view = Math.floor(view);
+    viewNum.value = view;
+    viewSlider.value = view;
+    drawInfNavMap();
+    animationToggle.checked = false
+}
