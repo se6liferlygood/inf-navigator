@@ -38,6 +38,23 @@ fieldset {
     margin-bottom: 10px;
 }
 
+.controls fieldset {
+    height: fit-content;
+}
+
+#infNavBeta {
+    width: calc(100% - 9px);
+}
+
+.animationControls {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+#animationToggle:hover {
+    cursor: pointer;
+}
+
 #infNavInfo {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
