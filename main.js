@@ -1,96 +1,4 @@
-var inputMatrices = [
-    [
-        [document.getElementById("000"),document.getElementById("001"),document.getElementById("002")]
-    ],
-    [
-        [document.getElementById("100"),document.getElementById("101"),document.getElementById("102")],
-        [document.getElementById("110"),document.getElementById("111"),document.getElementById("112")]
-    ],
-    [
-        [document.getElementById("200"),document.getElementById("201"),document.getElementById("202")],
-        [document.getElementById("210"),document.getElementById("211"),document.getElementById("212")],
-        [document.getElementById("220"),document.getElementById("221"),document.getElementById("222")]
-    ]
-]
-
-var outputs = [document.getElementById("output0"),document.getElementById("output1"),document.getElementById("output2")];
-
-function findInfs(n) {
-    let matrix = [];
-    for(let i = 0; i <= n; i++) {
-        let row = [];
-        for(let j = 0; j < 3; j++) {
-            if(inputMatrices[n][i][j].value=="") return;
-            row.push(Number(inputMatrices[n][i][j].value));
-        }
-        matrix.push(row);
-    }
-    outputs[n].innerHTML = "";
-    let count = 1;
-    for(let a = 0; a < 8; a++) {
-        let result = "(";
-        for(let b = 0; b < 3; b++) {
-            result += (a&(1<<b)?"-M":"+M");
-            if(b!=2) result += ", "; 
-        }
-        result += ") &rarr; (";
-        let anyInf = false;
-        for(let b = 0; b <= n; b++) {
-            let sum = 0;
-            for(let c = 0; c < 3; c++) {
-                sum += matrix[b][c]*(a&(1<<c)?-1:1);
-                if(sum>1 || sum<-1) break;
-            }
-            if(sum>1) {
-                result += "+&infin;"
-                anyInf = true;
-            } else if(sum<-1) {
-                result += "-&infin;";
-                anyInf = true;
-            } else if(sum==0) {
-                result += "0";
-            } else if(sum==1) {
-                result += "+M";
-            } else if(sum==-1) {
-                result += "-M";
-            } else {
-                result += (Math.sign(sum)>0?"+":"")+sum+"M";
-            }
-            if(b!=n) result += ", ";
-        }
-        if(anyInf) {
-            outputs[n].innerHTML += count+". "+result+")<br>";
-            count++;
-        }
-    }
-    if(outputs[n].innerHTML=="") outputs[n].innerHTML += "NO &infin; FOUND";
-}
-
-function clearM(n) {
-    for(let i = 0; i <= n; i++) {
-        for(let j = 0; j < 3; j++) {
-            inputMatrices[n][i][j].value = "";
-        }
-    }
-    outputs[n].innerHTML = "";
-    if(n==2) {
-        for(let i = 0; i < 3; i++) {
-            rotations[i].value = "";
-        }
-    }
-}
-
-function copyRow(n,m) {
-    let whichMatrix = Number(prompt("copy which matrix?\nhow many rows does the matrix have?\n3 or 2 or 1"));
-    if(!whichMatrix || whichMatrix<1 || whichMatrix>3 || Math.floor(whichMatrix)!=whichMatrix) return;
-    let row = Number(prompt("what row in this matrix will you copy?\n1"+((n)=>{let str="";for(let a=2;a<=n;a++) str += " or "+a;return str})(whichMatrix)));
-    if(row < 1 || row > whichMatrix || Math.floor(row)!=row) return;
-    whichMatrix--;
-    row--;
-    for(let a = 0; a < 3; a++) {
-        inputMatrices[n][m][a].value = inputMatrices[whichMatrix][row][a].value;
-    }
-}
+const dTr = Math.PI/180;
 
 function getRotationMatrix(alpha,beta,gamma) {
     let a = Math.cos(alpha),
@@ -106,31 +14,22 @@ function getRotationMatrix(alpha,beta,gamma) {
     ]
 }
 
-function translateToRobloxAngle(x,e=0) {
-    if(typeof(x)=="object") {
-        let arr = []
-        for(let i = 0; i < x.length; i++) {
-            arr.push(translateToRobloxAngle(x[i]));
-        }
-        return arr;
-    } else return x>180?x-360:x;
-}
-
-var rotations = [document.getElementById("R0"),document.getElementById("R1"),document.getElementById("R2")];
-const dTr = Math.PI/180;
-function rotationAutoFill() {
-    let radians = [];
-    for(let i = 0; i < 3; i++) {
-        if(rotations[i].value=="") return;
-        radians.push(rotations[i].value*dTr);
-    }
-    outputs[2].innerHTML =  "";
-    rotationMatrix = getRotationMatrix(radians[0],radians[1],radians[2]);
-    for(let i = 0; i < 3; i++) {
-        for(let j = 0; j < 3; j++) {
-            inputMatrices[2][i][j].value = rotationMatrix[i][j];
+function matrixMulitply3x3AB(matrixA,matrixB) {
+    let newMatrix = [
+            [1,0,0],
+            [0,1,0],
+            [0,0,1]
+        ]
+    for(let a = 0; a < 3; a++) {
+        for(let b = 0; b < 3; b++) {
+            let sum = 0;
+            for(let c = 0; c < 3; c++) {
+                sum += matrixA[a][c]*matrixB[c][b];
+            }
+            newMatrix[a][b] = sum;
         }
     }
+    return newMatrix;
 }
 
 function rotationMod(x) {
@@ -216,9 +115,18 @@ var infctx = infNavCanvas.getContext("2d");
 infNavCanvas.width = 360;
 infNavCanvas.height = 360;
 
+var cursor = document.getElementById("cursor");
+var cursorRect = cursor.getBoundingClientRect();
+cursorRect = [cursorRect.width/2,cursorRect.height/2];
+
+cursor.style.marginLeft = (infNavCanvas.offsetLeft-cursorRect[0])+"px";
+cursor.style.marginTop = (infNavCanvas.offsetTop-cursorRect[1])+"px";
+
 var mouse = [0,0];
 infNavCanvas.addEventListener('click',(e)=>{
     let rect = infNavCanvas.getBoundingClientRect();
+    cursor.style.marginLeft = (e.pageX-cursorRect[0])+"px";
+    cursor.style.marginTop = (e.pageY-cursorRect[1])+"px";
     mouse = [
       Math.floor(360*(e.clientX-rect.left)/rect.width),
       Math.floor(360*(e.clientY-rect.top)/rect.height)
@@ -226,38 +134,154 @@ infNavCanvas.addEventListener('click',(e)=>{
     updateSelectedRotation();
 },false);
 
-var infNavOuput = document.getElementById("infNavOutput");
+function matricesToHTML(matrices,extraAtStart="") {
+    let str = '<div class="matrices">'+extraAtStart;
+    for(let a = 0; a < matrices.length; a++) {
+        str += '<div class="matrix"> <div class="eraser"></div> <div class="drawLine"></div> <table>'
+        for(let b = 0; b < matrices[a].length; b++) {
+            str += "<tr>";
+            for(let c = 0; c < matrices[a][0].length; c++) {
+                str += '<td>'+matrices[a][b][c]+'</td>';
+            }
+            str += "</tr>"
+        }
+        str += '</table> <div class="eraser"></div> </div>'
+    }
+    return str+'</div>';
+}
 
+function getCalcString(row,off,modifyRow=false) {
+    let count = 0, str = "", sign = 1, toBeRemoved = [];
+    for(let x = 0; x < row.length; x++) {
+        sign = (off&(1<<x)?-1:1)
+        if(row[x]==1 || row[x]==-1) {
+            if(count == 0) {
+                str += (row[x]*sign)<0?"-M":"M";
+            } else {
+                str += (row[x]*sign)<0?" - M":" + M"
+            }
+            count++;
+        } else if(row[x]!=0) {
+            if(count == 0) {
+                str += (isFinite(row[x])?row[x]+"M":(row[x]<0?"-&infin;":"&infin;"));
+            } else {
+                str += row[x]<0?" - ":" + "
+                str += (isFinite(row[x])?Math.abs(row[x])+"M":(row[x]<0?"-&infin;":"&infin;"));
+            }
+            count++;
+        } else {
+            toBeRemoved.push(x);
+        }
+        if(modifyRow) row[x] *= sign;
+    }
+    if(modifyRow) {
+        for(let i = toBeRemoved.length-1; i >= 0; i--) {
+            for(let j = toBeRemoved[i]; j < row.length; j++)  {
+                row[j] = row[j+1];
+            }
+            row.pop();
+        }
+    }
+    return str;
+}
 
+var calculationsProof = document.getElementById("calculationsProof");
+var rotationOutput = document.getElementById("rotationOutput");
+var offsetOutput = document.getElementById("offsetOutput");
+var resultOutput = document.getElementById("resultOutput");
 var selectedRotation = [0,0,0];
 function updateSelectedRotation() {
     selectedRotation = viewMode==0?[mouse[0],view,mouse[1]]:viewMode==1?[view,mouse[0],mouse[1]]:[mouse[0],mouse[1],view]
     var radians = [selectedRotation[0]*dTr,selectedRotation[1]*dTr,selectedRotation[2]*dTr],
-        rotationMatrix = getRotationMatrix(radians[0],radians[1],radians[2]);
+        matrix = getRotationMatrix(radians[0],radians[1],radians[2])
+        resultMatrix = matrixMulitply3x3AB(rootRotationMarix,matrix),
         colorCode = [0,0,0],
-        sum = 0;
+        sum = 0,
+        offsetMatrix = [[(offset&1?"-M":"M")],[(offset&2?"-M":"M")],[(offset&4?"-M":"M")]],
+        calculations = "<h3>how the calculations were done for the rotation you selected</h3>"+matricesToHTML([resultMatrix,offsetMatrix]),
+        calcArr = [];
     for(let y = 0; y < 3; y++) {
-        sum = 0;
-        for(let x = 0; x < 3; x++) {
-            sum += rotationMatrix[y][x]*(offset&(1<<x)?-1:1);
-            if(sum>1 || sum<-1) break;
+        calcArr.push([getCalcString(resultMatrix[y],offset,true)]);
+    }
+    calculations += matricesToHTML([calcArr],'<div class="equal">=</div>');
+    calcArr = [];
+    let notComplete = true;
+    while(notComplete) {
+        notComplete = false;
+        for(let y = 0; y < 3; y++) {
+            if(resultMatrix[y].length>1) {
+                resultMatrix[y][0] += resultMatrix[y][1];
+                resultMatrix[y][1] = resultMatrix[y][resultMatrix[y].length-1];
+                if(resultMatrix[y][0]>1) {
+                    resultMatrix[y][0] = Infinity;
+                } else if(resultMatrix[y][0]<-1) {
+                    resultMatrix[y][0] = -Infinity;
+                }
+                resultMatrix[y].pop();
+                notComplete = true;
+            }
+            calcArr.push([getCalcString(resultMatrix[y],offset)]);
         }
-        if(sum>1) {
-            colorCode[y] = 2;
-        } else if(sum<-1) {
-            colorCode[y] = 1;
-        } else {
-            colorCode[y] = 0;
+        if(notComplete) {
+            calculations += matricesToHTML([calcArr],'<div class="equal">=</div>');
+            calcArr = [];
         }
     }
-    infNavOuput.innerHTML = "rotation: ("+selectedRotation[0]+", "+selectedRotation[1]+", "+selectedRotation[2]+")<br>offset: ("+(offset&1?"-M, ":"+M, ")+(offset&2?"-M, ":"+M, ")+(offset&4?"-M":"+M")+')<br>result: <span class="infNavResult" style="background-color:'+infColorCode(colorCode)+'">'+InfCode(colorCode)+"</span>";
+    rotationOutput.innerHTML = "("+selectedRotation[0]+", "+selectedRotation[1]+", "+selectedRotation[2]+")";
+    for(let i = 0; i < 3; i++) {
+        if(isFinite(resultMatrix[i][0])) {
+            colorCode[i] = 0;
+        } else if(resultMatrix[i][0]<0) {
+            colorCode[i] = 1;
+        } else {
+            colorCode[i] = 2;
+        }
+    }
+    resultOutput.innerHTML = "("+calcArr[0][0]+", "+calcArr[1][0]+", "+calcArr[2][0]+")";
+    calculationsProof.innerHTML = calculations;
+    let erasers = document.getElementsByClassName("eraser");
+    for(let i = 0; i < erasers.length; i++) {
+        let rect = erasers[i].getBoundingClientRect();
+        erasers[i].style.position = "absolute";
+        erasers[i].style.width = rect.width+"px";
+        erasers[i].style.left = rect.left+"px";
+        erasers[i].style.borderTop = "solid white 5px";
+    }
 }
 
-function copyRotation()  {
-    clearM(2);
+var rootRotationOutput = document.getElementById("rootRotationOutput");
+var rootRotations = [document.getElementById("RN0"),document.getElementById("RN1"),document.getElementById("RN2")];
+var rootRotationMarix = [
+    [1,0,0],
+    [0,1,0],
+    [0,0,1]
+]
+function performRootRotation() {
+    let r = [];
+    let num = 0
     for(let i = 0; i < 3; i++) {
-        rotations[i].value = selectedRotation[i];
+        num = Number(rootRotations[i].value)%360;
+        num = isFinite(num)?num:0;
+        rootRotations[i].value = num;
+        r.push(num);
     }
+    rootRotationOutput.innerHTML = "("+rootRotations[0].value+", "+rootRotations[1].value+", "+rootRotations[2].value+")";
+    rootRotationMarix = getRotationMatrix(r[0]*dTr,r[1]*dTr,r[2]*dTr);
+    drawInfNavMap();
+}
+
+function clearRootRotation() {
+    for(let i = 0; i < 3; i++) {
+        rootRotations[i].value = 0;
+    }
+    performRootRotation();
+}
+
+function setRootRotationToCurrentRotation() {
+    for(let i = 0; i < 3; i++) {
+        rootRotations[i].value = selectedRotation[i];
+    }
+    performRootRotation();
 }
 
 var animating = false;
@@ -267,13 +291,13 @@ function drawInfNavMap(animationCall=false) {
     for(let i = 0; i < infNavCanvas.height; i += inc) {
         for(let j = 0; j < infNavCanvas.width; j += inc) {
             let radians = viewMode==0?[j*dTr,view*dTr,i*dTr]:viewMode==1?[view*dTr,j*dTr,i*dTr]:[j*dTr,i*dTr,view*dTr],
-                rotationMatrix = getRotationMatrix(radians[0],radians[1],radians[2]),
+                resultMatrix = matrixMulitply3x3AB(rootRotationMarix,getRotationMatrix(radians[0],radians[1],radians[2])),
                 colorCode = [0,0,0],
                 sum = 0;
             for(let y = 0; y < 3; y++) {
                 sum = 0;
                 for(let x = 0; x < 3; x++) {
-                    sum += rotationMatrix[y][x]*(offset&(1<<x)?-1:1);
+                    sum += resultMatrix[y][x]*(offset&(1<<x)?-1:1);
                     if(sum>1 || sum<-1) break;
                 }
                 if(sum>1) {
@@ -292,7 +316,6 @@ function drawInfNavMap(animationCall=false) {
     }
     updateSelectedRotation();
 }
-drawInfNavMap();
 
 var viewNum =  document.getElementById("infNavBeta");
 var viewSlider = document.getElementById("infNavBetaSlider");
@@ -319,3 +342,5 @@ async function infNavAnimate() {
     drawInfNavMap();
     animationToggle.checked = false
 }
+
+drawInfNavMap();
