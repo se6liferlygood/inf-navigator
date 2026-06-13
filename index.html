@@ -7,53 +7,6 @@
     <title>&infin; navigator</title>
 </head>
 <body>
-    <form action="javascript:findInfs(2)">
-        <h1 id="top">3x3 matrix</h1>
-        <div>
-            you can find rotations with <a href="#infNav">&infin; navigator</a><br>
-        </div>
-        <div class="matrix">
-            <input type="number" step="any" id="R0"><input type="number" step="any" id="R1"><input type="number" step="any" id="R2">
-        </div>
-        <button type="button" onclick="rotationAutoFill()">ROTATION AUTO FILL MATRIX</button>
-        <br><br>
-        <button type="button" onclick="clearM(2)">CLEAR</button><br>
-        <div class="matrix">
-            <input type="number" step="any" id="200"> <input type="number" step="any" id="201"> <input type="number" step="any" id="202"> <button type="button" onclick="copyRow(2,0)">COPY</button>
-            <input type="number" step="any" id="210"> <input type="number" step="any" id="211"> <input type="number" step="any" id="212"> <button type="button" onclick="copyRow(2,1)">COPY</button>
-            <input type="number" step="any" id="220"> <input type="number" step="any" id="221"> <input type="number" step="any" id="222"> <button type="button" onclick="copyRow(2,2)">COPY</button>
-        </div>
-        <input type="submit" value="FIND &infin;"></input>
-        <div id="output2">
-
-        </div>
-    </form>
-    <hr>
-    <form action="javascript:findInfs(1)">
-        <h1>2x3 matrix</h1>
-        <button type="button" onclick="clearM(1)">CLEAR</button><br>
-        <div class="matrix">
-            <input type="number" step="any" id="100"> <input type="number" step="any" id="101"> <input type="number" step="any" id="102"> <button type="button" onclick="copyRow(1,0)">COPY</button>
-            <input type="number" step="any" id="110"> <input type="number" step="any" id="111"> <input type="number" step="any" id="112"> <button type="button" onclick="copyRow(1,1)">COPY</button>
-        </div>
-       <input type="submit" value="FIND &infin;"></input>
-        <div id="output1">
-
-        </div>
-    </form>
-    <hr>
-    <form action="javascript:findInfs(0)">
-        <h1>1x3 matrix</h1>
-        <button type="button" onclick="clearM(0)">CLEAR</button><br>
-        <div class="matrix">
-            <input type="number" step="any" id="000"> <input type="number" step="any" id="001"> <input type="number" step="any" id="002"> <button type="button" onclick="copyRow(0,0)">COPY</button>
-        </div>
-        <input type="submit" value="FIND &infin;"></input>
-        <div id="output0">
-
-        </div>
-    </form>
-    <hr>
     <div id="infNavigator">
         <h2 id="infNav">&infin; navigator</h2>
         <div>
@@ -62,8 +15,14 @@
             then you type it in like this into f3x: (0, 0, c) &rarr; (0, b, c) &rarr; (a, b, c)<br>
             rotation tool might say it is a different rotation but the result is the same<br><br>
         </div>
-        <a href="#top"><button onclick="copyRotation()">COPY ROTATION</button></a>
-        <div id="infNavOutput"></div><br>
+        <div id="infNavOutput">
+            rotation: <span id="rotationOutput">(0, 0, 0)</span><br>
+            <button onclick="setRootRotationToCurrentRotation()">USE AS ROOT ROTATION</button><br><br>
+            root rotation: <span id="rootRotationOutput">(0, 0, 0)</span><br>
+            offset: <span id="offsetOutput">(+M, +M, +M)</span><br>
+            result: <span id="resultOutput">(x, y, z)</span><br>
+            <a href="#calculationsProof">why?</a>
+        </div><br>
         <div>CLICK TO GET ROTATION!</div>
         <canvas id="infNavCanvas"></canvas>
         <form autocomplete="off" class="controls">
@@ -85,7 +44,7 @@
             </fieldset>
             <fieldset>
                 <legend>OFFSET</legend>
-                <select id="infNavOffset" onchange="offset = Number(this.value); drawInfNavMap();">
+                <select id="infNavOffset" onchange="offset = Number(this.value);offsetOutput.innerHTML = '('+(offset&1?'-M':'+M')+','+(offset&2?'-M':'+M')+','+(offset&4?'-M)':'+M)'); drawInfNavMap();">
                     <option value="0">(+M,+M,+M)</option>
                     <option value="1">(-M,+M,+M)</option>
                     <option value="2">(+M,-M,+M)</option>
@@ -96,10 +55,21 @@
                     <option value="7">(-M,-M,-M)</option>
                 </select>
             </fieldset>
+            <fieldset id="rootRotationControls">
+                <legend>ROOT ROTATION</legend>
+                <div class="three">
+                    <input type="number" step="any" id="RN0" value="0"> <input type="number" step="any" id="RN1" value="0"> <input type="number" step="any" id="RN2" value="0">
+                </div>
+                <button type="button" class="bigButton" onclick="performRootRotation()">APPLY</button>
+                <button type="button" class="bigButton" onclick="clearRootRotation()">CLEAR</button>
+            </fieldset>
         </form>
         <div>select colors to isolate them, if no colors are selected then all of them will be shown</div>
         <div id="infNavInfo"></div>
         <button onclick="clearInfNavColors()">CLEAR</button>
+        <div id="calculationsProof">
+            
+        </div>
     </div>
     <hr>
     <div>
@@ -119,6 +89,7 @@
         0xffffff7p100<br>
         there are 6 f then 7, this representation of max can be typed into f3x<br><br>
     </div>
+    <div id="cursor">X</div>
     <script src="main.js"></script>
 </body>
 </html>
