@@ -1,20 +1,3 @@
-.matrix {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
-    width: 600px;
-}
-
-.matrix input {
-    width: 100%;
-    -webkit-appearance: none;
-    margin: 0;
-    -moz-appearance: textfield;
-}
-
-.matrix button {
-    width: min-content;
-}
-
 .infNavResult {
     width:fit-content;
 }
@@ -24,6 +7,11 @@ canvas {
     width: 600px;
     aspect-ratio: 1/1;
     image-rendering: optimizeSpeed;
+    margin-top: 2px;
+}
+
+canvas:hover {
+    cursor: pointer;
 }
 
 fieldset {
@@ -33,26 +21,47 @@ fieldset {
 
 .controls {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr;
     width: 600px;
     margin-bottom: 10px;
 }
 
 .controls fieldset {
-    height: fit-content;
+    height: auto;
+    width: auto;
 }
 
 #infNavBeta {
     width: calc(100% - 9px);
 }
 
-.animationControls {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+#infNavBetaSlider {
+    width: calc(100% - 29px);
+}
+
+#animationToggle {
+    width: fit-content;
 }
 
 #animationToggle:hover {
     cursor: pointer;
+}
+
+.three {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    width: calc(100% - 9px);
+}
+
+.three input {
+    width: 100%;
+    -webkit-appearance: none;
+    margin: 0;
+    -moz-appearance: textfield;
+}
+
+.bigButton {
+    width: 100%;
 }
 
 #infNavInfo {
@@ -70,4 +79,59 @@ fieldset {
 
 .infNavColorCode input:hover {
     cursor: pointer;
+}
+
+#calculationsProof {
+    margin-top: 50px;
+}
+
+.matrices {
+    display: flex;
+    margin-top: 10px;
+    height: fit-content;
+}
+
+.equal {
+    margin: auto 5px auto 0
+}
+
+.matrix {
+    width: fit-content;
+    border: solid 2px black;
+    border-top: 0;
+    margin-right: 5px;
+}
+
+.drawLine {
+    border-top: solid 2px black;
+    width: 100%;
+}
+
+.eraser {
+    width: calc(100% - 12px);
+    margin-inline: auto;
+    overflow: visible;
+}
+
+.matrix table {
+    border-collapse: separate; 
+    table-layout: fixed;
+    border-spacing: 5px;
+}
+
+.matrix td {
+    text-align: center;
+    width: fit-content;
+}
+
+.eraser {
+    color: white;
+}
+
+#cursor {
+    position: absolute;
+    user-select: none;
+    top: 0;
+    left: 0;
+    text-shadow: 0 0 10px white;
 }
